@@ -1,6 +1,1 @@
-Inserting strings 'apple', 'app' into Trie
-Count Words Equal to 'apple': 1
-Count Words Starting With 'app': 2
-Erasing word 'app' from trie
-Count Words Equal to 'apple': 1
-Count Words Starting With 'apple': 1
+abc
