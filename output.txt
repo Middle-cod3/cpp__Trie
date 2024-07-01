@@ -1,1 +1,2 @@
-abc
+No of distince substring is 7
+No of distince substring is 7

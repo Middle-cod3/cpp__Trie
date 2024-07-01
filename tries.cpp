@@ -647,16 +647,58 @@ string completeString(int n, vector<string> &a)
 // TC :
 // SC :
 /*
-4.
-ANS :
+4. Count Distinct Substrings
+ANS : Given a string 'S', you are supposed to return the number of distinct substrings(including empty substring) of the given string. You should implement the program using a trie.
+
+Note :
+A string ‘B’ is a substring of a string ‘A’ if ‘B’ that can be obtained by deletion of, several characters(possibly none) from the start of ‘A’ and several characters(possibly none) from the end of ‘A’.
+
+Two strings ‘X’ and ‘Y’ are considered different if there is at least one index ‘i’  such that the character of ‘X’ at index ‘i’ is different from the character of ‘Y’ at index ‘i’(X[i]!=Y[i]).
 Input :   || Output :
 */
 // Bruteforce ----------->
-// TC :
-// SC :
+// Time Complexity: O(N*N) where N is the number of characters in the given word. The implementation has two nested loops:
+// The outer loop iterates over each character of the string, leading to O(N) iterations.
+// The inner loop iterates over the remaining characters in the string for each character, also leading to O(N) iterations in the worst case.
+// Space Complexity : O(N*N)where N is the number of characters in the given word. The size of the set to store distinct substrings can grow up to O(N*N) in the worst case where all substrings are distinct. Each substring stored in the set occupies space proportional to its length, but the total space occupied by all substrings will limit to O(N*N).
+int countDistinctSubstringsB(string &s)
+{
+    int n = LEN(s);
+    set<string> st;
+    FOR(i, n)
+    {
+        string str = "";
+        FOR_INNER(j, i, n)
+        {
+            str += s[j];
+            st.insert(str);
+        }
+    }
+    return SZ(st) + 1; // This +1 menas we added "" blank string as per question
+}
 // Better ----------->
-// TC :
-// SC :
+// Time Complexity: O(N*N)where N is the length of the input string. This is because for each starting position of the substring, we traverse the entire substring once. However, due to the Trie structure, the actual number of comparisons is reduced as we progress.
+// Space Complexity : O(N*N) where N is the length of the input string. In the worst-case scenario, where there are no common prefixes among substrings the number of nodes could be as high as the total number of substrings which is bounded by O(N*N).
+int countDistinctSubstringsBetter(string &s)
+{
+    int n = LEN(s);
+    int cnt = 0;
+    Node *root = new Node();
+    FOR(i, n)
+    {
+        Node *node = root;
+        FOR_INNER(j, i, n)
+        {
+            if (!node->containsKey(s[j]))
+            {
+                cnt++;
+                node->put(s[i], new Node());
+            }
+            node=node->get(s[i]);
+        }
+    }
+    return cnt + 1; // This +1 menas we added "" blank string as per question
+}
 // Optimal ---------->
 // TC :
 // SC :
@@ -867,9 +909,13 @@ int main()
     // cout << "Count Words Starting With 'apple': ";
     // cout << trie.countWordsStartingWith("app") << endl;
 
-    int n = 4;
-    vector<string> A = {"ab", "abc", "a", "bp"};
-    cout << completeString(n, A) << endl; // Output: "abc"
+    // int n = 4;
+    // vector<string> A = {"ab", "abc", "a", "bp"};
+    // cout << completeString(n, A) << endl; // Output: "abc"
+
+    string s = "abc";
+    cout << "No of distince substring is " << countDistinctSubstringsB(s) << endl;
+    cout << "No of distince substring is " << countDistinctSubstringsBetter(s) << endl;
     //  End code here-------->>
 
     return 0;
