@@ -694,7 +694,7 @@ int countDistinctSubstringsBetter(string &s)
                 cnt++;
                 node->put(s[i], new Node());
             }
-            node=node->get(s[i]);
+            node = node->get(s[i]);
         }
     }
     return cnt + 1; // This +1 menas we added "" blank string as per question
@@ -703,8 +703,16 @@ int countDistinctSubstringsBetter(string &s)
 // TC :
 // SC :
 /*
-5.
-ANS :
+5. Bit PreRequisites for TRIE Problems
+ANS : Geek is learning data structures. He wants to learn the trie data structure, but there are a few bit's prerequisites that he must first understand.
+
+Given three bit manipulations functions: XOR, check and setBit.
+
+In XOR function you are given two integers n and m return the xor of n and m.
+
+In check function you are given two integer a and b return 1 if ath bit (1-indexed) of b is set otherwise return 0.
+
+In setBit function you are given two integer c and d, set the cth bit (0-indexed) of d if not yet set .
 Input :   || Output :
 */
 // Bruteforce ----------->
@@ -717,16 +725,172 @@ Input :   || Output :
 // TC :
 // SC :
 /*
-6.
-ANS :
+6. Maximum XOR of Two Numbers in an Array
+ANS : Given an integer array nums, return the maximum result of nums[i] XOR nums[j], where 0 <= i <= j < n.
 Input :   || Output :
 */
-// Bruteforce ----------->
-// TC :
-// SC :
+/*
+Intuition : First insert all arr nums in Tries in bits. After that maximize it usinf if x=8 then x^arr[i]=> that should be maximum. Preserve this maximum value that is arr[i] ^ arr[j] return this maximum value.
+As we know bits is bigger if its left values is 1 so we have to make 2 numbers xor who can make any numbers 0->1
+*/
+// Bruteforce ------FOR 1 ARRAY----->
+// Time Complexity: O(32*N + 32*M) where N is the length of the input array.
+// Insertion: The time complexity of inserting each number into the Trie is O(32) as each number is composed of 32 bits in the Binary Representation. This operation is performed for each of the N numbers in the first array.
+// Finding Maximum XOR Operation: To find the maximum XOR value for each number, we iterate through its 32 bits performing constant-time operations for each bit. This is performed for all M numbers in the second array hence this operation accounts for the second time complexity of O(32*N).
+// Space Complexity: O(32N) where N is the length of the input array. This algorithm has a linear space complexity with respect to the size of the input array and each number takes up space proportional to 32 which is the size in Binary Representation.
+// struct Node
+// {
+//     // Array to store links
+//     // to child nodes (0 and 1)
+//     Node *links[2];
+
+//     // Method to check if a specific
+//     // bit key is present in the child nodes
+//     bool containsKey(int bit)
+//     {
+
+//         // Returns true if the link at
+//         // index 'bit' is not NULL
+//         return (links[bit] != NULL);
+//     }
+
+//     // Method to get the child node
+//     // corresponding to a specific bit
+//     Node *get(int bit)
+//     {
+
+//         // Returns the child
+//         // node at index 'bit'
+//         return links[bit];
+//     }
+
+//     // Method to set a child node at a
+//     // specific index in the links array
+//     void put(int bit, Node *node)
+//     {
+
+//         // Sets the child node at index
+//         // 'bit' to the provided node
+//         links[bit] = node;
+//     }
+// };
+
+// // Trie class
+// class Trie
+// {
+// private:
+//     // Root node of the Trie
+//     Node *root;
+
+// public:
+//     // Constructor to initialize
+//     // the Trie with a root node
+//     Trie()
+//     {
+//         // Creates a new root
+//         // node for the Trie
+//         root = new Node();
+//     }
+
+//     // Method to insert a number into the Trie
+//     void insert(int num)
+//     {
+//         // Start from the root node
+//         Node *node = root;
+//         // Iterate through each bit of the
+//         // number (from left to right)
+//         for (int i = 31; i >= 0; i--)
+//         {
+//             // Extract the i-th bit of the number
+//             int bit = (num >> i) & 1;
+
+//             // If the current node doesn't have a
+//             // child node with the current bit
+//             if (!node->containsKey(bit))
+//             {
+
+//                 // Create a new child node
+//                 // with the current bit
+//                 node->put(bit, new Node());
+//             }
+
+//             // Move to the child node
+//             // corresponding to the current bit
+//             node = node->get(bit);
+//         }
+//     }
+
+//     // Method to find the maximum
+//     // XOR value for a given number
+//     int getMax(int num)
+//     {
+//         // Start from the root node
+//         Node *node = root;
+
+//         // Initialize the maximum XOR value
+//         int maxNum = 0;
+
+//         // Iterate through each bit of
+//         // the number (from left to right)
+//         for (int i = 31; i >= 0; i--)
+//         {
+
+//             // Extract the i-th
+//             // bit of the number
+//             int bit = (num >> i) & 1;
+
+//             // If the complement of the current
+//             // bit exists in the Trie
+//             if (node->containsKey(1 - bit))
+//             {
+
+//                 // Update the maximum XOR
+//                 // value with the current bit
+//                 maxNum |= (1 << i);
+
+//                 // Move to the child node corresponding
+//                 // to the complement of the current bit
+//                 node = node->get(1 - bit);
+//             }
+//             else
+//             {
+
+//                 // Move to the child node
+//                 // corresponding to the current bit
+//                 node = node->get(bit);
+//             }
+//         }
+
+//         // Return the maximum XOR value
+//         return maxNum;
+//     }
+// };
+// class Solution
+// {
+// public:
+//     int findMaximumXOR(vector<int> &nums)
+//     {
+//         int maxXOR = 0;
+//         Trie trie;
+//         trav(it, nums)
+//         {
+//             trie.insert(it);
+//             maxXOR = max(maxXOR, trie.getMax(it));
+//         }
+//         return maxXOR;
+//     }
+// };
 // Better ----------->
 // TC :
 // SC :
+// int findMaximumXOR2(vector<int> &nums1, VI &nums2)
+// {
+//     int maxXOR = 0;
+//     Trie trie;
+//     trav(it, nums1) trie.insert(it);
+//     trav(it, nums2) maxXOR = max(maxXOR, trie.get(it));
+//     return maxXOR;
+// }
 // Optimal ---------->
 // TC :
 // SC :
@@ -913,9 +1077,9 @@ int main()
     // vector<string> A = {"ab", "abc", "a", "bp"};
     // cout << completeString(n, A) << endl; // Output: "abc"
 
-    string s = "abc";
-    cout << "No of distince substring is " << countDistinctSubstringsB(s) << endl;
-    cout << "No of distince substring is " << countDistinctSubstringsBetter(s) << endl;
+    // string s = "abc";
+    // cout << "No of distince substring is " << countDistinctSubstringsB(s) << endl;
+    // cout << "No of distince substring is " << countDistinctSubstringsBetter(s) << endl;
     //  End code here-------->>
 
     return 0;
