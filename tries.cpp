@@ -556,90 +556,90 @@ Input :   || Output :
 // TC :
 // SC :
 
-class Node
-{
-public:
-    Node *links[26];
-    bool flag = false;
+// class Node
+// {
+// public:
+//     Node *links[26];
+//     bool flag = false;
 
-    bool containsKey(char c) { return links[c - 'a'] != nullptr; }
-    Node *get(char ch) { return links[ch - 'a']; }
-    void put(char ch, Node *node) { links[ch - 'a'] = node; }
-    void setEnd() { flag = true; }
-    bool isEnd() { return flag; }
-};
+//     bool containsKey(char c) { return links[c - 'a'] != nullptr; }
+//     Node *get(char ch) { return links[ch - 'a']; }
+//     void put(char ch, Node *node) { links[ch - 'a'] = node; }
+//     void setEnd() { flag = true; }
+//     bool isEnd() { return flag; }
+// };
 
-class Trie
-{
-private:
-    Node *root;
+// class Trie
+// {
+// private:
+//     Node *root;
 
-public:
-    Trie() { root = new Node(); }
+// public:
+//     Trie() { root = new Node(); }
 
-    void insert(string word)
-    {
-        Node *node = root;
-        for (int i = 0; i < word.length(); i++)
-        {
-            if (!node->containsKey(word[i]))
-            {
-                node->put(word[i], new Node());
-            }
-            node = node->get(word[i]);
-        }
-        node->setEnd();
-    }
+//     void insert(string word)
+//     {
+//         Node *node = root;
+//         for (int i = 0; i < word.length(); i++)
+//         {
+//             if (!node->containsKey(word[i]))
+//             {
+//                 node->put(word[i], new Node());
+//             }
+//             node = node->get(word[i]);
+//         }
+//         node->setEnd();
+//     }
 
-    bool checkIfPrefixExists(string word)
-    {
-        Node *node = root;
-        for (int i = 0; i < word.length(); i++)
-        {
-            if (node->containsKey(word[i]))
-            {
-                node = node->get(word[i]);
-                if (!node->isEnd())
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-};
+//     bool checkIfPrefixExists(string word)
+//     {
+//         Node *node = root;
+//         for (int i = 0; i < word.length(); i++)
+//         {
+//             if (node->containsKey(word[i]))
+//             {
+//                 node = node->get(word[i]);
+//                 if (!node->isEnd())
+//                 {
+//                     return false;
+//                 }
+//             }
+//             else
+//             {
+//                 return false;
+//             }
+//         }
+//         return true;
+//     }
+// };
 
-string completeString(int n, vector<string> &a)
-{
-    Trie trie;
-    for (const string &it : a)
-    {
-        trie.insert(it);
-    }
+// string completeString(int n, vector<string> &a)
+// {
+//     Trie trie;
+//     for (const string &it : a)
+//     {
+//         trie.insert(it);
+//     }
 
-    string longest = "";
-    for (const string &it : a)
-    {
-        if (trie.checkIfPrefixExists(it))
-        {
-            if (it.length() > longest.length() ||
-                (it.length() == longest.length() && it < longest))
-            {
-                longest = it;
-            }
-        }
-    }
+//     string longest = "";
+//     for (const string &it : a)
+//     {
+//         if (trie.checkIfPrefixExists(it))
+//         {
+//             if (it.length() > longest.length() ||
+//                 (it.length() == longest.length() && it < longest))
+//             {
+//                 longest = it;
+//             }
+//         }
+//     }
 
-    if (longest == "")
-    {
-        return "None";
-    }
-    return longest;
-}
+//     if (longest == "")
+//     {
+//         return "None";
+//     }
+//     return longest;
+// }
 // Better ----------->
 // TC :
 // SC :
@@ -738,7 +738,7 @@ As we know bits is bigger if its left values is 1 so we have to make 2 numbers x
 // Insertion: The time complexity of inserting each number into the Trie is O(32) as each number is composed of 32 bits in the Binary Representation. This operation is performed for each of the N numbers in the first array.
 // Finding Maximum XOR Operation: To find the maximum XOR value for each number, we iterate through its 32 bits performing constant-time operations for each bit. This is performed for all M numbers in the second array hence this operation accounts for the second time complexity of O(32*N).
 // Space Complexity: O(32N) where N is the length of the input array. This algorithm has a linear space complexity with respect to the size of the input array and each number takes up space proportional to 32 which is the size in Binary Representation.
-// struct Node
+//  struct Node
 // {
 //     // Array to store links
 //     // to child nodes (0 and 1)
@@ -895,16 +895,238 @@ As we know bits is bigger if its left values is 1 so we have to make 2 numbers x
 // TC :
 // SC :
 /*
-7.
-ANS :
+7. Maximum Xor Queries
+ANS : You are given an array nums consisting of non-negative integers. You are also given a queries array, where queries[i] = [xi, mi].
+
+The answer to the ith query is the maximum bitwise XOR value of xi and any element of nums that does not exceed mi. In other words, the answer is max(nums[j] XOR xi) for all j such that nums[j] <= mi. If all elements in nums are larger than mi, then the answer is -1.
+
+Return an integer array answer where answer.length == queries.length and answer[i] is the answer to the ith query.
+
+
 Input :   || Output :
 */
 // Bruteforce ----------->
-// TC :
+// TC :O(nxm)
 // SC :
+
+vector<int> maximizeXor(vector<int> &arr, vector<vector<int>> &q)
+{
+    int n = SZ(q);
+    int m = SZ(arr);
+    VI ans;
+    FOR(i, n)
+    {
+        int xi = q[i][0];
+        int mi = q[i][1];
+        int maxXor = -1;
+        FOR(j, m)
+        {
+            if (arr[j] <= mi)
+            {
+                maxXor = max(maxXor, arr[j] ^ xi);
+            }
+        }
+        ans.PB(maxXor);
+    }
+    return ans;
+}
 // Better ----------->
-// TC :
-// SC :
+// Time Complexity: O(32*N + Q(logQ) + 32*Q) where N is the size of the input array and Q is the number of queries.
+// For each number in the input array, we traverse its bits from left to right (total of 32 bits). Since there are ‘N’ numbers in the array, the total time complexity is O(32*N).
+// Sorting the offline queries based on their endpoints requires O(Q log(Q) time using the inbuilt library for sorting.
+// For each query, we traverse the bits of the numbers in the Trie to find the maximum XOR value. Since each number has 32 bits and there are Q Queries, the total time complexity for processing is O(32*Q).
+// Space Complexity: O(32*N + Q) where N is the size of the input array and Q is the number of queries.
+
+// The space complexity of the Trie depends on the number of bits required to represent the numbers in the input array. Each number is represented as a sequence of 32 bits hence the space required by the Trie is O(32*N).
+// We store the queries and sort them based on the endpoint of each query. This requires an additional space complexity of O(Q).
+struct Node
+{
+    // Array to store links
+    // to child nodes (0 and 1)
+    Node *links[2];
+
+    // Method to check if a specific
+    // bit key is present in the child nodes
+    bool containsKey(int bit)
+    {
+
+        // Returns true if the link at
+        // index 'bit' is not NULL
+        return (links[bit] != NULL);
+    }
+
+    // Method to get the child node
+    // corresponding to a specific bit
+    Node *get(int bit)
+    {
+
+        // Returns the child
+        // node at index 'bit'
+        return links[bit];
+    }
+
+    // Method to set a child node at a
+    // specific index in the links array
+    void put(int bit, Node *node)
+    {
+
+        // Sets the child node at index
+        // 'bit' to the provided node
+        links[bit] = node;
+    }
+};
+
+// Trie class
+class Trie
+{
+private:
+    // Root node of the Trie
+    Node *root;
+
+public:
+    // Constructor to initialize
+    // the Trie with a root node
+    Trie()
+    {
+        // Creates a new root
+        // node for the Trie
+        root = new Node();
+    }
+
+    // Method to insert a number into the Trie
+    void insert(int num)
+    {
+        // Start from the root node
+        Node *node = root;
+        // Iterate through each bit of the
+        // number (from left to right)
+        for (int i = 31; i >= 0; i--)
+        {
+            // Extract the i-th bit of the number
+            int bit = (num >> i) & 1;
+
+            // If the current node doesn't have a
+            // child node with the current bit
+            if (!node->containsKey(bit))
+            {
+
+                // Create a new child node
+                // with the current bit
+                node->put(bit, new Node());
+            }
+
+            // Move to the child node
+            // corresponding to the current bit
+            node = node->get(bit);
+        }
+    }
+
+    // Method to find the maximum
+    // XOR value for a given number
+    int getMax(int num)
+    {
+        // Start from the root node
+        Node *node = root;
+
+        // Initialize the maximum XOR value
+        int maxNum = 0;
+
+        // Iterate through each bit of
+        // the number (from left to right)
+        for (int i = 31; i >= 0; i--)
+        {
+
+            // Extract the i-th
+            // bit of the number
+            int bit = (num >> i) & 1;
+
+            // If the complement of the current
+            // bit exists in the Trie
+            if (node->containsKey(1 - bit))
+            {
+
+                // Update the maximum XOR
+                // value with the current bit
+                maxNum |= (1 << i);
+
+                // Move to the child node corresponding
+                // to the complement of the current bit
+                node = node->get(1 - bit);
+            }
+            else
+            {
+
+                // Move to the child node
+                // corresponding to the current bit
+                node = node->get(bit);
+            }
+        }
+
+        // Return the maximum XOR value
+        return maxNum;
+    }
+};
+vector<int> maxXorQueries(vector<int> &arr, vector<vector<int>> &queries)
+{
+
+    // Initialize vector to
+    // store results of queries
+    vector<int> ans(queries.size(), 0);
+
+    // Vector to store offline queries
+    vector<pair<int, pair<int, int>>> offlineQueries;
+    // Sort the array of numbers
+    sort(arr.begin(), arr.end());
+
+    int index = 0;
+
+    // Convert queries to offline
+    // queries and store them in a vector
+    for (auto &it : queries)
+    {
+        offlineQueries.push_back({it[1], {it[0], index++}});
+    }
+
+    // Sort offline queries
+    // based on their end points
+    sort(offlineQueries.begin(), offlineQueries.end());
+
+    // Pointer to iterate through
+    // the array of numbers
+    int i = 0;
+
+    // Number of elements in the array
+    int n = arr.size();
+
+    // Create an instance of
+    // the Trie data structure
+    Trie trie;
+
+    // Process each offline query
+    for (auto &it : offlineQueries)
+    {
+        // Insert numbers into the trie
+        // until the current query's end point
+        while (i < n && arr[i] <= it.first)
+        {
+            trie.insert(arr[i]);
+            i++;
+        }
+
+        // If there are numbers inserted
+        // into the trie, find the maximum
+        // XOR value for the query range
+        if (i != 0)
+            ans[it.second.second] = trie.getMax(it.second.first);
+        else
+            // If no numbers inserted,
+            // set result to -1
+            ans[it.second.second] = -1;
+    }
+    // Return the results
+    // of all queries
+    return ans;
+}
 // Optimal ---------->
 // TC :
 // SC :
